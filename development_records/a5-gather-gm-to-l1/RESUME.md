@@ -35,3 +35,5 @@ On the isolated A5 workspace, inspect logs/gather-r10-offline.log and logs/gathe
 ## R11 · Direct CBUF patch and recovery
 
 Start with RESTORE_A5.md and repro/restore_a5.sh on a new machine. On the existing A5, the R11 pinned compiler patch built both tools with 16 jobs. The validated offline FP16/BF16 compiler artifacts and hashes are under build-phase1/gather-r2/r11. The standard generic producer adapter is required for bytecode replay. Consumer pretty-printed to_tensor syntax without the explicit result type is rejected by the producer parser. Use the AIC Gather asset and AIC launch metadata only for the verified single-core program. Keep raw captures and pass logs on authorized internal storage.
+
+Use repro/make_gather_fixture.py and repro/replay_gather_device.sh as documented in RESTORE_A5.md if the old adapter or scripts are unavailable. The historical R5/R6/R7 scripts named above are present under repro/. The R10/R11 local diagnostic replay paths are historical, and the portable R11 replay supersedes them. The compiler checkout's build.sh is upstream source rather than a copy in these records.

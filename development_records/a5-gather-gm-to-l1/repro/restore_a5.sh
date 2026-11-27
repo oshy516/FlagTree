@@ -86,6 +86,20 @@ case "$mode" in
       -DLLVM_DIR="$sdk/lib/cmake/llvm" -DMLIR_DIR="$sdk/lib/cmake/mlir" \
       -DTRITON_WHEEL_DIR="$build/wheel/triton" -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="$build/wheel/triton/_C"
     cmake --build "$build" --target triton triton-opt triton-mlir-opt --parallel "$jobs"
+    binding="$src/python/triton/_C/libtriton.so"
+    backend="$src/python/triton/backends/ascend"
+    for link in "$binding" "$backend"; do
+      if [[ $link == "$binding" ]]; then
+        target="$build/wheel/triton/_C/libtriton.so"
+      else
+        target="$src/third_party/ascend/backend"
+      fi
+      [[ -e "$target" ]]
+      if [[ ! -e "$link" && ! -L "$link" ]]; then
+        ln -s -- "$target" "$link"
+      fi
+      [[ $(realpath "$link") == $(realpath "$target") ]]
+    done
     find "$build" -type f \( -name libtriton.so -o -name triton-opt -o -name triton-mlir-opt \) -print0 |
       sort -z | xargs -0 -r sha256sum >"$work/producer.sha256"
     test -s "$work/producer.sha256"
