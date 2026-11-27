@@ -32,5 +32,5 @@ for dtype in fp16 bf16; do
   export R11_DTYPE="$dtype"
   export TRITON_CACHE_DIR=$(mktemp -d "$logs/cache-$dtype.XXXXXX")
   timeout -k 5 100 "$python" -u "$script" >"$logs/$dtype.device.log" 2>&1
-  test "$(grep -c '^GATHER_DEVICE_PASS True ' "$logs/$dtype.device.log")" = 3
+  test "$(grep -c '^GATHER_DEVICE_PASS True ' "$logs/$dtype.device.log")" = 6
 done

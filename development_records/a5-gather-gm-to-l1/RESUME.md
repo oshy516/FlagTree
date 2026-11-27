@@ -39,3 +39,7 @@ Start with RESTORE_A5.md and repro/restore_a5.sh on a new machine. On the existi
 Use repro/make_gather_fixture.py and repro/replay_gather_device.sh as documented in RESTORE_A5.md if the old adapter or scripts are unavailable. The historical R5/R6/R7 scripts named above are present under repro/. The R10/R11 local diagnostic replay paths are historical, and the portable R11 replay supersedes them. The compiler checkout's build.sh is upstream source rather than a copy in these records.
 
 The producer-only R11 probe used three fresh processes with no NPU launch and stopped at the TTIR boundary. Exit codes were 134, 0, 134. One process aborted inside TTIR compilation with a glibc double-free/corruption diagnostic and one reached the boundary before aborting during teardown. The first invalid memory access is still unknown. The adapter replay bypasses this producer stage and can continue independently.
+
+## R12 · Expanded Gather checks
+
+The c310 production bitcode target now includes both Gather L1 device variants. The Registry gate and the tutorial skip remain pending formal JIT. Use RESTORE_A5.md and pass --tile 32 --cols 64 when generating the fixtures. Set R12_TILE_SIZE=32 and R12_COLS=64 for the device replay. The harness checks consecutive, discrete, mixed, repeated, reverse and boundary indices for each dtype.

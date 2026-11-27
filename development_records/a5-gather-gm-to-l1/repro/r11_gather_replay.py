@@ -105,8 +105,12 @@ compiler.ttir_to_linalg = replay_adapter
 print("Captured FP16 16x32 adapter replay; standard bytecode, device compiler and launcher", flush=True)
 dtypes = {"fp16": (torch.float16, triton.language.float16),
           "bf16": (torch.bfloat16, triton.language.bfloat16)}
+tile = int(os.environ.get("R12_TILE_SIZE", "16"))
+cols = int(os.environ.get("R12_COLS", "32"))
+assert tile in (16, 32) and cols in (32, 64)
+assert f"tensor<{tile}x{cols}x" in captured_ir
 for dtype, tl_dtype in [dtypes[dtype_name]]:
-    for tile, cols in [(16, 32)]:
+    for tile, cols in [(tile, cols)]:
         rows = tile * 4
         src_cpu = ((torch.arange(rows * cols).reshape(rows, cols) % 31 - 15) / 16).to(dtype)
         query_cpu = ((torch.arange(tile * cols).reshape(tile, cols) % 13 - 6) / 8).to(dtype)
@@ -114,7 +118,10 @@ for dtype, tl_dtype in [dtypes[dtype_name]]:
         query = query_cpu.npu()
         for pattern, ids in [("consecutive", torch.arange(tile)+1),
                              ("discrete", torch.arange(tile)*3),
-                             ("mixed", torch.arange(tile)+2*(torch.arange(tile)//2))]:
+                             ("mixed", torch.arange(tile)+2*(torch.arange(tile)//2)),
+                             ("repeated", torch.arange(tile) // 2),
+                             ("reverse", torch.arange(tile - 1, -1, -1)),
+                             ("boundary", torch.tensor([0, rows - 1]).repeat(tile // 2))]:
             index = ids.int().reshape(tile, 1).npu()
             result = torch.full((tile, tile), float("nan"), dtype=torch.float32, device="npu")
             expected = query_cpu.float() @ src_cpu[ids].float().T
