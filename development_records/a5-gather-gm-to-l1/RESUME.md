@@ -25,3 +25,5 @@ A patched Gather replay is queued via `repro/r7_run_patched_when_ready.sh`, whic
 ## R8 · GCC build resume
 
 Apply patches/r8-arith-aptype-gcc.patch to the pinned compiler after the existing TCB and Matmul patches when restoring elsewhere. The failed ArithToHIVMAVE.cpp.o target passed. Inspect logs/gather-r8-build.log and .exit before starting another Ninja invocation. The R8 build targets bishengir-opt and bishengir-compile together with 16 jobs. R7 already verified ordinary dot on A5. Continue with TCB, Split, PlanMemory and the isolated Gather L1 replay on an idle NPU.
+
+Apply patches/r9-static-link.patch after R8. Both targets linked in the existing -j16 build. Stage matching CANN 9.2.1 c310 meta-op and host bitcode in the isolated compiler prefix lib directory. Check logs/gather-r9-device-metaop.log and logs/gather-r9-offline.log for the production pipeline replay, and logs/gather-r9-{tcb,split}.mlir for the minimal check.

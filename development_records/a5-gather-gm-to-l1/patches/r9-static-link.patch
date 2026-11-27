@@ -1,0 +1,61 @@
+diff --git a/bishengir/lib/Dialect/Tensor/Transforms/PropagateReshape/Utils.cpp b/bishengir/lib/Dialect/Tensor/Transforms/PropagateReshape/Utils.cpp
+index 782e16c..040db35 100644
+--- a/bishengir/lib/Dialect/Tensor/Transforms/PropagateReshape/Utils.cpp
++++ b/bishengir/lib/Dialect/Tensor/Transforms/PropagateReshape/Utils.cpp
+@@ -245,6 +245,10 @@ template void collapseAndReplace<mlir::tensor::ExpandShapeOp>(
+     PatternRewriter &rewriter, mlir::tensor::ExpandShapeOp reshapeOp, Type ty,
+     Value newVal, Operation *definingOp);
+
++template void collapseAndReplace<mlir::tensor::CollapseShapeOp>(
++    PatternRewriter &rewriter, mlir::tensor::CollapseShapeOp reshapeOp, Type ty,
++    Value newVal, Operation *definingOp);
++
+ LogicalResult computeExpandPad(OpBuilder &rewriter, tensor::PadOp &padOp,
+                                ArrayRef<ReassociationIndices> reassociation,
+                                DenseMap<uint64_t, uint64_t> &padBodyMapping,
+diff --git a/bishengir/lib/Tools/hivmc/A3/CMakeLists.txt b/bishengir/lib/Tools/hivmc/A3/CMakeLists.txt
+index db81cf5..18603bd 100644
+--- a/bishengir/lib/Tools/hivmc/A3/CMakeLists.txt
++++ b/bishengir/lib/Tools/hivmc/A3/CMakeLists.txt
+@@ -5,5 +5,6 @@ add_bishengir_library(BiShengIRHIVMCLibA3
+   ADDITIONAL_HEADER_DIRS
+   ${BISHENGIR_MAIN_INCLUDE_DIR}/bishengir/Tools/hivmc
+
+-
++  LINK_LIBS PUBLIC
++  BiShengIRHIVMCAdapterSanitizer
+ )
+diff --git a/bishengir/lib/Tools/hivmc/A5/CMakeLists.txt b/bishengir/lib/Tools/hivmc/A5/CMakeLists.txt
+index 964db49..22e92ee 100644
+--- a/bishengir/lib/Tools/hivmc/A5/CMakeLists.txt
++++ b/bishengir/lib/Tools/hivmc/A5/CMakeLists.txt
+@@ -5,4 +5,6 @@ add_bishengir_library(BiShengIRHIVMCLibA5
+   ADDITIONAL_HEADER_DIRS
+   ${BISHENGIR_MAIN_INCLUDE_DIR}/bishengir/Tools/hivmc
+
++  LINK_LIBS PUBLIC
++  BiShengIRHIVMCAdapterSanitizer
+ )
+diff --git a/bishengir/lib/Tools/hivmc/CMakeLists.txt b/bishengir/lib/Tools/hivmc/CMakeLists.txt
+index 6af5167..e3d1a62 100644
+--- a/bishengir/lib/Tools/hivmc/CMakeLists.txt
++++ b/bishengir/lib/Tools/hivmc/CMakeLists.txt
+@@ -1,8 +1,17 @@
++add_bishengir_library(BiShengIRHIVMCAdapterSanitizer
++    PARTIAL_SOURCES_INTENDED
++    AdapterSanitizer.cpp
++
++    LINK_LIBS PUBLIC
++    BiShengIRHACCUtils
++    MLIRLLVMDialect
++)
++
+ add_bishengir_library(BiShengIRHIVMCLib
++    PARTIAL_SOURCES_INTENDED
+     HIVMCConfig.cpp
+     HIVMCMain.cpp
+     Utility.cpp
+-    AdapterSanitizer.cpp
+
+     ADDITIONAL_HEADER_DIRS
+     ${BISHENGIR_MAIN_INCLUDE_DIR}/bishengir/Tools/hivmc

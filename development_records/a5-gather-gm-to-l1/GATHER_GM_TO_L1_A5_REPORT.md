@@ -97,3 +97,7 @@ The stock-compiler diagnostic admitted the existing Gather L1 Mix bitcode locall
 ## R8 · GCC compatibility
 
 ArithToHIVMAVE.cpp now uses four member partial specializations with a defaulted second template argument. The APInt/APFloat function bodies and call sites are unchanged. The original failed Ninja object compiled with GCC and returned 0 (logs/gather-r8-arith-object.log and .exit). Both compiler targets resumed in the existing LLVM 19 build with one 16-job Ninja invocation (logs/gather-r8-build.log and .exit).
+
+## R9 · Static links and first patched Gather compile
+
+Both host tools linked successfully with Ninja -j16 after making AdapterSanitizer an explicit A3/A5 static dependency and instantiating collapseAndReplace for CollapseShapeOp. Tool SHA256 values are in logs/gather-r9-tools.sha256. The minimal TCB check marked the CustomOp CBUF allocation and Split retained TCB ID 0 in both AIC and AIV, with Gather on AIC. Running PlanMemory directly on this fixture aborted because the Copy control still had a tensor operand. The first patched Gather JIT reached device linking, which failed with missing built-in c310 meta-op symbols. The existing CANN 9.2.1 c310 assets were linked into the isolated compiler build lib directory for the follow-up.
