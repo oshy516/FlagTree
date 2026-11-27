@@ -1,0 +1,2 @@
+374:FAILED: [code=1] include/llvm/TargetParser/ARMTargetParserDef.inc /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/build/include/llvm/TargetParser/ARMTargetParserDef.inc
+378:/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/llvm/include/llvm/IR/Intrinsics.td:633:35: error: Variable not defined: 'v256bf16'

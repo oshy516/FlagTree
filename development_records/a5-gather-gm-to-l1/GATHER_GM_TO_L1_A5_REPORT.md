@@ -49,3 +49,11 @@ No confirmed device reservation was used. Git local identities use the requested
 ### R3 native and debugger checkpoint
 
 Exact PR Head native build returned 0. Project Python and libtriton paths verified in the baseline, with SHA256 for libtriton and both producer tools recorded in logs/gather-r3-prhead-baseline.log. Plain FP16 tl.dot reproduced glibc heap corruption independently of Gather. Used project-local GDB 12.1 from extracted Ubuntu packages, with core dumps disabled and no system installs. In logs/gather-r3-prhead-dot-gdb.log GDB stops on SIGABRT: malloc -> aligned operator new -> llvm::allocate_buffer -> mlir::AsmStateImpl -> mlir::Operation::print -> libtriton pybind wrapper. This stack locates where corruption is detected, not the memory write or Pass responsible. No ABI conclusion. The independent Gather UB probe and the eventual patched-compiler JIT are reported separately in their logs. Patched compiler cannot execute until the exact LLVM19 SDK completes. No hardware, performance, formal gate change, commit, or push.
+
+## R4 SDK configuration recovery
+
+LLVM19 failed in MemRefOps.cpp with no declaration matching ReinterpretCastOp::build. The pinned Ascend build-tools/build.sh passes LLVM_BSPUB_DAVINCI_BISHENGIR_A5=ON and LLVM_BSPUB_DAVINCI_BISHENGIR_A5_NPUIR=ON, missing in the initial standalone SDK configuration. Reconfiguring the existing build directory with both, no new LLVM source or build tree. Changed compiler definitions may invalidate old objects. See repro/resume-llvm19-sdk-a5.sh. The compiler candidate remains unvalidated. No new Gather ELF or hardware run.
+
+R4 continuation: compared the eight added lines of the pushed GitCode TCB commit 4f9f2c0caa63435a197dade3f8c58309635bd4fc with the exact-pin efb7141581c0 worktree patch; identical additions, separate base histories.
+
+After enabling the A5 flags, LLVM TableGen failed with undefined v256bf16. The parent LLVM_BSPUB_DAVINCI_BISHENGIR setting was still OFF. The pinned build-tools configuration exposes the parent feature flag along with the two A5 flags. The new resume script enables all three in the same existing SDK build directory. See evidence/llvm19-tablegen-v256bf16.txt. This is a configuration recovery, not a validated toolchain or hardware result.
