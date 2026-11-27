@@ -1,0 +1,56 @@
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+source /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/__init__.py native /home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/wheel/triton/_C/libtriton.so case dot
+Traceback (most recent call last):
+  File "/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/backends/ascend/compiler.py", line 378, in run
+    return stage(src, metadata)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/backends/ascend/compiler.py", line 1826, in <lambda>
+    stages["mlirbc"] = lambda src, metadata: linalg_to_bc_by_triton_mlir_opt(src, metadata, options)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/backends/ascend/compiler.py", line 601, in linalg_to_bc_by_triton_mlir_opt
+    subprocess.run([
+  File "/usr/local/python3.12.16/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-mlir-opt', '/home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.ttadapter.mlir', '--emit-bytecode', '--emit-bytecode-version=4', '-o', '/home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.mlirbc']' returned non-zero exit status 1.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/../r5_graph_probe.py", line 59, in <module>
+    kernel = triton.compile(ASTSource(fn, sig, constexprs=constants), target=target, options={"enable_graph_optimize": True})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/spec/ascend/triton/compiler/compiler.py", line 363, in compile
+    next_module = compile_ir(module, metadata)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/backends/ascend/compiler.py", line 382, in run
+    raise MLIRCompilationError(stage_name, detail) from e
+triton.compiler.errors.MLIRCompilationError:
+///------------------[ERROR][Triton][BEG]------------------
+[LinalgIRToBytecodeByTritonMLIROpt] encounters error:
+Command '['/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-mlir-opt', '/home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.ttadapter.mlir', '--emit-bytecode', '--emit-bytecode-version=4', '-o', '/home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.mlirbc']' returned non-zero exit status 1.
+command: /home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-mlir-opt /home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.ttadapter.mlir --emit-bytecode --emit-bytecode-version=4 -o /home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.mlirbc
+stderr:
+/home/ysh-workspace/a5-dsa-template/.tmp/tmpqhlqhc3c/kernel.ttadapter.mlir:13:5: error: custom op 'bufferization.to_tensor' expected 'to'
+    %reinterpret_cast_0 = memref.reinterpret_cast %arg3 to offset: [0], sizes: [32, 16], strides: [16, 1] : memref<?xf16> to memref<32x16xf16, strided<[16, 1]>>
+    ^
+
+
+[INFO]: The compiled kernel cache is in /home/ysh-workspace/a5-dsa-template/.cache/gather-r5-graph/G4CEYNSI7Q7NDF7ZY5LUTLP2GDXEBIB2UGBMAYSIQN6XEXQBT22Q
+
+///------------------[ERROR][Triton][END]------------------
+
+[ERROR] 2026-11-27-14:48:28 (PID:791519, Device:-1, RankID:-1) ERR99999 UNKNOWN applicaiton exception
+corrupted size vs. prev_size
+Fatal Python error: Aborted
+
+Current thread 0x0000ffffbdf04ae0 (most recent call first):
+  <no Python frame>
+
+Extension modules: numpy.core._multiarray_umath, numpy.core._multiarray_tests, numpy.linalg._umath_linalg, numpy.fft._pocketfft_internal, numpy.random._common, numpy.random.bit_generator, numpy.random._bounded_integers, numpy.random._mt19937, numpy.random.mtrand, numpy.random._philox, numpy.random._pcg64, numpy.random._sfc64, numpy.random._generator, torch._C, torch._C._dynamo.autograd_compiler, torch._C._dynamo.eval_frame, torch._C._dynamo.guards, torch._C._dynamo.utils, torch._C._fft, torch._C._linalg, torch._C._nested, torch._C._nn, torch._C._sparse, torch._C._special, torch_npu._C (total: 25)
+timeout: the monitored command dumped core
+exit=134

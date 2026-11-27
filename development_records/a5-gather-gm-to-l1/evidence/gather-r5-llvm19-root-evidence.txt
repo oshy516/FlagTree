@@ -1,0 +1,85 @@
+FAILED: [code=1] tools/mlir/lib/Dialect/MemRef/IR/CMakeFiles/obj.MLIRMemRefDialect.dir/MemRefOps.cpp.o
+/usr/bin/c++ -DBSPUB_DAVINCI -DBSPUB_DAVINCI_BISHENGIR_A5 -DBSPUB_DAVINCI_BISHENGIR_A5_NPUIR -DGTEST_HAS_RTTI=0 -D_DEBUG -D_GLIBCXX_ASSERTIONS -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/build/tools/mlir/lib/Dialect/MemRef/IR -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/build/include -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/llvm/include -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include -I/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/build/tools/mlir/include -fPIC -fno-semantic-interposition -fvisibility-inlines-hidden -Werror=date-time -fno-lifetime-dse -Wall -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long -Wimplicit-fallthrough -Wno-uninitialized -Wno-nonnull -Wno-class-memaccess -Wno-redundant-move -Wno-pessimizing-move -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsuggest-override -Wno-comment -Wno-misleading-indentation -Wctad-maybe-unsupported -fdiagnostics-color -ffunction-sections -fdata-sections -Wundef -Wno-unused-but-set-parameter -Wno-deprecated-copy -O3 -DNDEBUG -std=c++17  -fno-exceptions -funwind-tables -fno-rtti -UNDEBUG -MD -MT tools/mlir/lib/Dialect/MemRef/IR/CMakeFiles/obj.MLIRMemRefDialect.dir/MemRefOps.cpp.o -MF tools/mlir/lib/Dialect/MemRef/IR/CMakeFiles/obj.MLIRMemRefDialect.dir/MemRefOps.cpp.o.d -o tools/mlir/lib/Dialect/MemRef/IR/CMakeFiles/obj.MLIRMemRefDialect.dir/MemRefOps.cpp.o -c /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp
+/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp: In static member function ‘static void mlir::memref::ExpandShapeOp::getCanonicalizationPatterns(mlir::RewritePatternSet&, mlir::MLIRContext*)’:
+/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp:2751:7: error: ‘FoldConstantDimOfOutputShape’ was not declared in this scope
+ 2751 |       FoldConstantDimOfOutputShape<ExpandShapeOp, CastOp>,
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp:2749:11: error: parse error in template argument list
+ 2749 |   results.add<
+      |           ^~~~
+ 2750 | #ifdef BSPUB_DAVINCI_BISHENGIR_A5
+      | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2751 |       FoldConstantDimOfOutputShape<ExpandShapeOp, CastOp>,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp:2753:76: error: expected primary-expression before ‘,’ token
+ 2753 |       ComposeReassociativeReshapeOps<ExpandShapeOp, ReshapeOpKind::kExpand>,
+      |                                                                            ^
+/home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp:2754:63: error: expected primary-expression before ‘>’ token
+ 2754 |       ComposeExpandOfCollapseOp<ExpandShapeOp, CollapseShapeOp>>(context);
+      |                                                               ^~
+In file included from /usr/include/c++/11/memory:76,
+                 from /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/llvm/include/llvm/Support/Casting.h:20,
+                 from /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include/mlir/Support/LLVM.h:23,
+                 from /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include/mlir/IR/MLIRContext.h:12,
+                 from /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include/mlir/IR/AttributeSupport.h:16,
+                 from /home/ysh-workspace/a5-dsa-template/dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include/mlir/IR/Attributes.h:12,
+dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/include/mlir/Dialect/Utils/ExpandShapeUtils.h:22:struct FoldConstantDimOfOutputShape : public OpRewritePattern<ExpandShapeOpTy> {
+dependencies/llvm19-06913395ef8aca66a9814723f4ccc616570b0fed/source/mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp:2751:      FoldConstantDimOfOutputShape<ExpandShapeOp, CastOp>,
+
+  // Check actual result type.
+  if (*expectedResultType != resultType)
+    return emitOpError("expected expanded type to be ")
+           << *expectedResultType << " but found " << resultType;
+
+  if ((int64_t)getStaticOutputShape().size() != resultType.getRank())
+    return emitOpError("expected number of static shape bounds to be equal to "
+                       "the output rank (")
+           << resultType.getRank() << ") but found "
+           << getStaticOutputShape().size() << " inputs instead";
+
+  if ((int64_t)getOutputShape().size() !=
+      llvm::count(getStaticOutputShape(), ShapedType::kDynamic))
+    return emitOpError("mismatch in dynamic dims in output_shape and "
+                       "static_output_shape: static_output_shape has ")
+           << llvm::count(getStaticOutputShape(), ShapedType::kDynamic)
+           << " dynamic dims while output_shape has " << getOutputShape().size()
+           << " values";
+
+  // Verify if provided output shapes are in agreement with output type.
+  DenseI64ArrayAttr staticOutputShapes = getStaticOutputShapeAttr();
+  ArrayRef<int64_t> resShape = getResult().getType().getShape();
+  for (auto [pos, shape] : llvm::enumerate(resShape)) {
+    if (!ShapedType::isDynamic(shape) && shape != staticOutputShapes[pos]) {
+      return emitOpError("invalid output shape provided at pos ") << pos;
+    }
+  }
+
+  return success();
+}
+
+void ExpandShapeOp::getCanonicalizationPatterns(RewritePatternSet &results,
+                                                MLIRContext *context) {
+  results.add<
+#ifdef BSPUB_DAVINCI_BISHENGIR_A5
+      FoldConstantDimOfOutputShape<ExpandShapeOp, CastOp>,
+#endif
+      ComposeReassociativeReshapeOps<ExpandShapeOp, ReshapeOpKind::kExpand>,
+      ComposeExpandOfCollapseOp<ExpandShapeOp, CollapseShapeOp>>(context);
+}
+
+/// Compute the layout map after collapsing a given source MemRef type with the
+/// specified reassociation indices.
+///
+/// Note: All collapsed dims in a reassociation group must be contiguous. It is
+78:CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
+445:LLVM_BSPUB_DAVINCI:BOOL=ON
+448:LLVM_BSPUB_DAVINCI_BISHENGIR:BOOL=ON
+451:LLVM_BSPUB_DAVINCI_BISHENGIR_A5:UNINITIALIZED=ON
+454:LLVM_BSPUB_DAVINCI_BISHENGIR_A5_NPUIR:UNINITIALIZED=ON
+630:LLVM_ENABLE_PROJECTS:STRING=mlir
+905:LLVM_TARGETS_TO_BUILD:STRING=AArch64
+140:  ENABLE_BSPUB="ON"
+482:                ENABLE_BSPUB="ON"
+714:    -DLLVM_BSPUB_DAVINCI_BISHENGIR="${ENABLE_BSPUB}" \
+716:    -DLLVM_BSPUB_DAVINCI_BISHENGIR_A5=ON \
+717:    -DLLVM_BSPUB_DAVINCI_BISHENGIR_A5_NPUIR=ON \

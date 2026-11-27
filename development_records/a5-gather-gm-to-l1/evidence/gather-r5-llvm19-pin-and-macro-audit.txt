@@ -1,0 +1,65 @@
+llvm/CMakeLists.txt exported=fc9a3b3ab4ca1d512ad7d8c7347f7f1b72a111fa pinned=fc9a3b3ab4ca1d512ad7d8c7347f7f1b72a111fa
+mlir/lib/Dialect/MemRef/IR/MemRefOps.cpp exported=1d0c3b4e5f775326858941f9162d54e8449d37ff pinned=1d0c3b4e5f775326858941f9162d54e8449d37ff
+mlir/include/mlir/Dialect/Utils/ExpandShapeUtils.h exported=f2beec872d7d4a51db14ad6805834a3c96d9988e pinned=f2beec872d7d4a51db14ad6805834a3c96d9988e
+  Xtensa
+)
+
+option(LLVM_BSPUB_DAVINCI_BISHENGIR "Enable BiShengIR features for BiSheng" OFF)
+if(LLVM_BSPUB_DAVINCI_BISHENGIR)
+  option(BSPUB_DAVINCI_BISHENGIR CACHE ON)
+  # BiShengIR project depends on HiIPU target
+  option(LLVM_BSPUB_DAVINCI CACHE ON)
+  add_definitions( -DBSPUB_DAVINCI )
+else()
+  option(BSPUB_DAVINCI_BISHENGIR CACHE OFF)
+endif()
+
+
+if(LLVM_BSPUB_DAVINCI_BISHENGIR_A5)
+  add_definitions( -DBSPUB_DAVINCI_BISHENGIR_A5 )
+endif()
+if(LLVM_BSPUB_DAVINCI_BISHENGIR_A5_NPUIR)
+  add_definitions( -DBSPUB_DAVINCI_BISHENGIR_A5_NPUIR )
+endif()
+if(LLVM_BSPUB_DAVINCI_BISHENGIR_A5_HIVMC)
+  add_definitions( -DBSPUB_DAVINCI_BISHENGIR_A5_HIVMC )
+endif()
+
+# List of targets with JIT support:
+set(LLVM_TARGETS_WITH_JIT X86 PowerPC AArch64 ARM Mips SystemZ)
+
+};
+
+/// A canonicalizer wrapper to replace ReinterpretCastOps.
+struct ReinterpretCastCanonicalizer {
+  void operator()(PatternRewriter &rewriter, ReinterpretCastOp op,
+                  ReinterpretCastOp newOp) {
+    rewriter.replaceOpWithNewOp<CastOp>(op, op.getType(), newOp);
+  }
+};
+#endif
+
+void ReinterpretCastOp::getCanonicalizationPatterns(RewritePatternSet &results,
+                                                    MLIRContext *context) {
+  results.add<ReinterpretCastOpExtractStridedMetadataFolder>(context);
+#ifdef BSPUB_DAVINCI_BISHENGIR_A5
+  results.add<OpWithOffsetSizesAndStridesConstantArgumentFolder<
+      ReinterpretCastOp, ReinterpretCastReturnTypeCanonicalizer,
+      ReinterpretCastCanonicalizer>>(context,
+                                     "ReinterpretCastConstantArgumentFolder");
+#endif
+}
+
+//===----------------------------------------------------------------------===//
+// Reassociative reshape ops
+-DBSPUB_DAVINCI
+-DBSPUB_DAVINCI_BISHENGIR_A5
+-DBSPUB_DAVINCI_BISHENGIR_A5_NPUIR
+-DGTEST_HAS_RTTI=0
+-DNDEBUG
+-D_DEBUG
+-D_GLIBCXX_ASSERTIONS
+-D_GNU_SOURCE
+-D__STDC_CONSTANT_MACROS
+-D__STDC_FORMAT_MACROS
+-D__STDC_LIMIT_MACROS

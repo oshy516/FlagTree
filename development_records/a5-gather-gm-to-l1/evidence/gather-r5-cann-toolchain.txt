@@ -1,0 +1,8 @@
+bishengir-opt 2.0.0 (/usr1/AscendNPU-IR/bishengir efb7141581c0 2026-10-14)
+llvm 19.1.7 06913395ef8a
+Release build
+8d0e531c7f2a6b2dad34d322c9d4c939cbb3031cbad9076c4967bb67c366738b  /usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-opt
+bishengir-compile 2.0.0 (/usr1/AscendNPU-IR/bishengir efb7141581c0 2026-10-14)
+llvm 19.1.7 06913395ef8a
+Release build
+0a5584eb7c74d35f9c84569f8abb86a9f3416c0b3d6c95bde00eb6f86da06e18  /usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-compile
