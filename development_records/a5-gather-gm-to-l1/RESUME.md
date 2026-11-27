@@ -21,3 +21,7 @@ R6 uses `repro/r6_resume_bishengir.sh` with the existing LLVM 19 build directory
 R7 dot hardware replay from the project root: `bash build-phase1/gather-r2/r7_dot_device.sh`. Copy the matching R7 scripts from the records directory if they are absent from that build directory. The Gather script uses isolated gate admission and requires `R7_BISHENGIR_ROOT` set to the selected tool prefix. The patched toolchain build uses the existing R6 build script and the extra `patches/r7-matmul-namespace.patch` in the pinned compiler tree.
 
 A patched Gather replay is queued via `repro/r7_run_patched_when_ready.sh`, which checks build exit status and binary hashes before using NPU 2. The stock tool attempt timed out in JIT. The earlier dot test did exit cleanly on the same device.
+
+## R8 · GCC build resume
+
+Apply patches/r8-arith-aptype-gcc.patch to the pinned compiler after the existing TCB and Matmul patches when restoring elsewhere. The failed ArithToHIVMAVE.cpp.o target passed. Inspect logs/gather-r8-build.log and .exit before starting another Ninja invocation. The R8 build targets bishengir-opt and bishengir-compile together with 16 jobs. R7 already verified ordinary dot on A5. Continue with TCB, Split, PlanMemory and the isolated Gather L1 replay on an idle NPU.

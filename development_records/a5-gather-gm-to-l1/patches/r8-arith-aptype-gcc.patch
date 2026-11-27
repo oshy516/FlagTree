@@ -1,0 +1,46 @@
+diff --git a/bishengir/lib/Conversion/ArithToHIVMAVE/ArithToHIVMAVE.cpp b/bishengir/lib/Conversion/ArithToHIVMAVE/ArithToHIVMAVE.cpp
+index b84a7e9..f692668 100644
+--- a/bishengir/lib/Conversion/ArithToHIVMAVE/ArithToHIVMAVE.cpp
++++ b/bishengir/lib/Conversion/ArithToHIVMAVE/ArithToHIVMAVE.cpp
+@@ -804,9 +804,9 @@ struct ConstantOpToHivmPLTLowering
+     : public OpConversionPattern<arith::ConstantOp> {
+   using OpConversionPattern<arith::ConstantOp>::OpConversionPattern;
+
+-  template <typename T> struct APTypeHelper;
++  template <typename T, typename = void> struct APTypeHelper;
+
+-  template <> struct APTypeHelper<APInt> {
++  template <typename Tag> struct APTypeHelper<APInt, Tag> {
+
+     static APInt createDefault(Type elementType) {
+       return APInt(elementType.getIntOrFloatBitWidth(), 0);
+@@ -823,7 +823,7 @@ struct ConstantOpToHivmPLTLowering
+     }
+   };
+
+-  template <> struct APTypeHelper<llvm::APFloat> {
++  template <typename Tag> struct APTypeHelper<llvm::APFloat, Tag> {
+
+     static APFloat createDefault(Type elementType) {
+       auto floatType = mlir::cast<FloatType>(elementType);
+@@ -1031,9 +1031,9 @@ struct ConstantOpToHivmVCIVCPLowering
+     }
+   }
+
+-  template <typename T> struct APTypeHelper;
++  template <typename T, typename = void> struct APTypeHelper;
+
+-  template <> struct APTypeHelper<APInt> {
++  template <typename Tag> struct APTypeHelper<APInt, Tag> {
+     using ElementType = int64_t;
+
+     static ElementType extract(const APInt &x) { return x.getSExtValue(); }
+@@ -1082,7 +1082,7 @@ struct ConstantOpToHivmVCIVCPLowering
+       return std::make_tuple(true, addValue, mulValue, quotients);
+     }
+   };
+-  template <> struct APTypeHelper<APFloat> {
++  template <typename Tag> struct APTypeHelper<APFloat, Tag> {
+     using ElementType = float;
+
+     static ElementType extract(const APFloat &v) {

@@ -93,3 +93,7 @@ Physical NPU 2 was idle and mapped to runtime device 0 (Ascend950DT_9582). The e
 The existing patched compiler build stopped on GCC's explicit-template-specialization namespace rule in Matmul.cpp. The build-pin worktree now reopens the anonymous namespace around the specialization. The incremental 16-job build passed the failed object and continued. The exact build-pin patch is saved separately from the TCB candidate.
 
 The stock-compiler diagnostic admitted the existing Gather L1 Mix bitcode locally and entered the first FP16 consecutive test on NPU 2. Python reported heap corruption during JIT and timed out (124) before a Gather ELF or kernel launch was observed. Device permission and dot runtime had already passed. The patched-compiler replay is queued behind the successful incremental build and rechecks that NPU 2 is idle.
+
+## R8 · GCC compatibility
+
+ArithToHIVMAVE.cpp now uses four member partial specializations with a defaulted second template argument. The APInt/APFloat function bodies and call sites are unchanged. The original failed Ninja object compiled with GCC and returned 0 (logs/gather-r8-arith-object.log and .exit). Both compiler targets resumed in the existing LLVM 19 build with one 16-job Ninja invocation (logs/gather-r8-build.log and .exit).
