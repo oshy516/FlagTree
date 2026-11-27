@@ -1,0 +1,51 @@
+# A5 ordinary Row Gather to L1
+
+## Current status
+
+A5 currently has yuansheng, not the previously deleted yuanshihan. Continued in /home/ysh-workspace/a5-dsa-template. No device test, commit, push, or PR.
+
+PR #1767 actual diff (logs/gather-a5-pr1767-evidence.log) says CustomOp-written L1 lacks the tightly-coupled identity needed at AIC/AIV Split. Current lowering may report read before first write; legacy can expose uninitialized values. Neither is acceptable as a final execution path.
+
+The existing v3.5 candidate in mem_ops/gather_gm_to_l1.cpp uses CANN 9.2.1 AscendC Nd2NzParams and DataCopyGM2L1ND2NZImpl, retains rank-2 FP16/BF16 GM source, rank-2 INT32 indices, rank-4 CBUF output, and both one-row and two-consecutive-row paths. It retains C310 PIPE_ALL completion synchronization. Ordinary and Mix device bitcodes in build-phase1/gather-c310 were inspected again; each defines both half and bf16 ABI entries. See logs/gather-a5-{normal,mix}-device-ir.log. DMA behavior and synchronization are still unverified on hardware.
+
+The existing uncommitted AscendNPU-IR feature/a5-customop-l1-tcb candidate collects MTE2 hivm.custom L1 outputs with the existing allocation tracer. No new compiler changes; no demonstrated cross-core identity, allocation pairing, or tl.dot correctness. No sparse implementation used.
+
+| Gate | FP16 | BF16 |
+|---|---|---|
+| c310 ordinary/Mix device bitcode definitions | confirmed | confirmed |
+| v3.5 Python import | blocked: triton._C missing | blocked: triton._C missing |
+| Registry/JIT, TCB/Split/PlanMemory, ELF | not run | not run |
+| 950 tl.dot correctness and performance | not run | not run |
+
+Test prepared at build-phase1/gather-c310/validation/check_row_gather_dot.py. It passed syntax checks and invokes the original v3.5 tutorial Python/JIT kernel with the current pipeline, using PyTorch reference checks for FP16/BF16, tiles 16/32, D 32/64 and consecutive/discrete/mixed indices. It has not run. The matching v3.5 native extension is absent and its 7d5de303 ARM64 archive is incomplete. Import evidence: logs/gather-a5-v35-import.log. No v3.6 binary was substituted, and no candidate was installed as an active Registry asset.
+
+GitCode .cim from the latest request differs from the previously configured .com. The .cim account email and push permission were not confirmed; no author configuration or remote refs changed.
+
+## R2 · v3.6 PR #1767
+
+PR #1767 open, unmerged at inspection. Base main 7cdc4362247be87979754b5038e9f8df3961a04d; head e27584c7977d8f0818d50e8115a7308552042a0b. Actual Git branch feature/a5-gather-gm-to-l1-r2 at that head in FlagTree-v36-gather-r2, origin https://github.com/oshy516/FlagTree.git. Only gather_gm_to_l1.cpp changed, restoring the c310 ordinary-row CANN ND2NZ and completion sync. Ordinary/Mix stand-alone assets compiled cleanly from the PR Head. No registry gate change or other op change. Existing v3.5 untouched.
+
+The PR Head has the same LLVM f6ded0be pin but different compiled C++ binding and CMake files (logs/gather-r2-pr1767-abi-comparison.log). Existing project-local v3.6 native extension matches its e8b1b75 source checkout, not the exact PR Head. That existing checkout was used only as a diagnostic. The temporary in-process Registry override used the ordinary gather Mix bitcode, the original Python tutorial kernel and disabled legacy pipeline. The FP16 C310 JIT emitted TTIR with Gather MTE2 CUBE, the intended asset path and tt.dot, then reported glibc heap corruption and exited via timeout 124. No ELF, BF16 or hardware results. See logs/gather-r2-v36-jit.log and .cache/gather-r2/*/gather_gm_to_l1_dot_kernel.ttir.
+
+PR Head pins AscendNPU-IR efb7141581c009bbd1d676b18941ed15ede62a68. The baseline CANN 9.2.1 bishengir-opt (LLVM 19.1.7) accepted the minimal two-function MLIR and marked the CopyOp CBUF control but not the MTE2 CustomOp CBUF output. See build-phase1/gather-r2/mark-custom-l1.mlir and logs/gather-r2-stock-tcb.mlir. This proves the narrow marking gap, not downstream Split, placement or synchronization. The previous candidate applied cleanly in the separate feature/a5-gather-r2-pinned worktree of the exact pin, leaving the Estella516 clone candidate intact. Wrapper CMake for a patched compiler is blocked by the historical LLVM19 SDK's missing libLLVMDemangle.a referenced by LLVMExports.cmake (logs/gather-r2-pinned-wrapper.log). No patched binary was produced or used by JIT.
+
+| R2 evidence | FP16 | BF16 |
+|---|---|---|
+| PR Head c310 normal/Mix bitcode | compiled | compiled |
+| Existing v3.6 Python/JIT diagnostic | TTIR with dot; heap corruption before ELF | not run |
+| Patched compiler Split/TCB/PlanMemory | not run | not run |
+| 950 correctness, stability, performance | not run | not run |
+
+No confirmed device reservation was used. Git local identities use the requested .com values. No commit, push, or PR; no write permission was reverified. The formal c310 gate and skip remain pending successful hardware verification.
+
+## R3 · Build unblock
+
+- PR Head checkout and Gather-only source change retained, branch feature/a5-gather-gm-to-l1-r2 at e27584c7977d8f0818d50e8115a7308552042a0b. Retired v3.5 FlagTree checkout as authorized, retained its tracked diff in logs/gather-r3-retired-v35-tracked.patch and retained other reports, Gather assets and evidence. No remote refs changed.
+- PR Head native producer uses read-only f6ded0be SDK, existing venv and symlinked clean compiler/FLIR dependencies. Older e8b1b75 build artifacts are kept, but its CMake source root and compiled binding files differ. PR Head uses a distinct build tree, no global extension. TRITON_BUILD_NPUIR=OFF, optional FlagPrism disabled. Initial configuration required this explicit FlagPrism setting. Native targets triton, triton-opt and triton-mlir-opt build with 16 jobs. See logs/gather-r3-prhead-native.log/.exit.
+- Both previous 19.1.7 install prefixes contained CMake LLVM exports referencing 100 static archives, all absent. No complete prebuilt SDK was located. The exact Ascend LLVM pin 06913395ef8aca66a9814723f4ccc616570b0fed was found in a local historical Git object database and exported read-only without changing that checkout. A separate AArch64 LLVM/MLIR SDK build is running at 16 jobs, no LLVM 22 substituted. Combined concurrency cap 32. See logs/gather-r3-llvm19-sdk-audit.txt and logs/gather-r3-llvm19-build.log/.exit. Dependency tree is tracked independently of .tmp/.cache; minimum 25 GB free-space guard for the SDK build.
+- Exact PR Head ordinary dot and Gather UB offline probes are queued (logs/gather-r3-prhead-baseline.log/.exit and gather-r3-prhead-{dot,ub}.log). No NPU calls in these probes. SDK completion queues only the patched bishengir-opt build, minimal before/after TCB test, then bishengir-compile, with actual paths and SHA256 when produced. See logs/gather-r3-patched-bishengir.log/.exit. The existing unmodified CANN output is logs/gather-r2-stock-tcb.mlir, the patched IR is pending.
+- Backend selection order is complete bundled opt/compile pair, then PATH, then TRITON_NPU_COMPILER_PATH fallback. The isolated FP16 Gather test queues only after both baseline cases succeed and the patch tools are built. It checks actual resolved paths and validates recorded SHA256 before compile. Logs: gather-r3-prhead-patched-jit.log/.exit. No claim of Split, PlanMemory, synchronization, ELF, hardware correctness, stability or performance. No device selected and no formal gate change. Local .com Git identities retained; no commit/push/PR.
+
+### R3 native and debugger checkpoint
+
+Exact PR Head native build returned 0. Project Python and libtriton paths verified in the baseline, with SHA256 for libtriton and both producer tools recorded in logs/gather-r3-prhead-baseline.log. Plain FP16 tl.dot reproduced glibc heap corruption independently of Gather. Used project-local GDB 12.1 from extracted Ubuntu packages, with core dumps disabled and no system installs. In logs/gather-r3-prhead-dot-gdb.log GDB stops on SIGABRT: malloc -> aligned operator new -> llvm::allocate_buffer -> mlir::AsmStateImpl -> mlir::Operation::print -> libtriton pybind wrapper. This stack locates where corruption is detected, not the memory write or Pass responsible. No ABI conclusion. The independent Gather UB probe and the eventual patched-compiler JIT are reported separately in their logs. Patched compiler cannot execute until the exact LLVM19 SDK completes. No hardware, performance, formal gate change, commit, or push.

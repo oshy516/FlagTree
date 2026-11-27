@@ -1,0 +1,7 @@
+# Resume A5 indexed Row Gather
+
+Use FlagTree PR #1767 Head e27584c7977d8f0818d50e8115a7308552042a0b and the oshy516/FlagTree branch feature/a5-gather-gm-to-l1-r2. The Estella516/AscendNPU-IR_shyuan feature/a5-customop-l1-tcb patch is based on 932115cd01b709dbe37500f5828be91c6cb1146b. For the actual FlagTree compiler use the separate pinned-compiler.patch on efb7141581c009bbd1d676b18941ed15ede62a68. The two patches are alternatives on different bases.
+
+Use ARM64 LLVM f6ded0be897e2878612dd903f7e8bb85448269e5 for the FlagTree producer and Ascend llvm-project 06913395ef8aca66a9814723f4ccc616570b0fed for the consumer. Archived repro scripts record source and build paths, CMake settings, command sequence, and diagnostic flags. Replace machine-specific paths when restoring. For an existing build use the same build tree and Ninja incremental targets. For a fresh machine use the exact pins. The old LLVM19 runtime prefixes export missing static archives and cannot build the patched consumer.
+
+Start with the ordinary dot and Gather UB offline baselines. Resolve the heap overwrite before making conclusions from the GDB detection site in MLIR printing. Compare mark-custom-l1.mlir with stock and patched tools. Verify actual compiler paths and SHA256, then run indexed Gather plus tl.dot on an allocated and idle A5 device for FP16/BF16, consecutive/discrete/mixed indices, tiles 16/32, D 32/64. Keep legacy off and the public c310 gate intact until verified.

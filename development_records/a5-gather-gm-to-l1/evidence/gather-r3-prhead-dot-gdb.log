@@ -1,0 +1,46 @@
+warning: Unable to determine the number of hardware watchpoints available.
+warning: Unable to determine the number of hardware breakpoints available.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+source /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/__init__.py native /home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/wheel/triton/_C/libtriton.so case dot
+[New Thread 0xffff66fbf100 (LWP 550164)]
+[New Thread 0xffff663ab100 (LWP 550168)]
+[New Thread 0xffff65b9b100 (LWP 550171)]
+[Detaching after vfork from child process 550178]
+[Detaching after vfork from child process 550181]
+[Detaching after vfork from child process 550184]
+corrupted size vs. prev_size
+
+Thread 1 "python" received signal SIGABRT, Aborted.
+0x0000ffffa1062038 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#0  0x0000ffffa1062038 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#1  0x0000ffffa101a83c in raise () from /lib/aarch64-linux-gnu/libc.so.6
+#2  0x0000ffffa1007134 in abort () from /lib/aarch64-linux-gnu/libc.so.6
+#3  0x0000ffffa1056030 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#4  0x0000ffffa106c4bc in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#5  0x0000ffffa106ce18 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#6  0x0000ffffa106cf84 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#7  0x0000ffffa106f1a4 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#8  0x0000ffffa107062c in malloc () from /lib/aarch64-linux-gnu/libc.so.6
+#9  0x0000ffff95543550 in operator new(unsigned long, std::align_val_t) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#10 0x0000ffff955435ac in operator new(unsigned long, std::align_val_t, std::nothrow_t const&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#11 0x0000ffff9c8969c8 in llvm::allocate_buffer(unsigned long, unsigned long) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#12 0x0000ffff9626f7d0 in llvm::BumpPtrAllocatorImpl<llvm::MallocAllocator, 4096ul, 4096ul, 128ul>::AllocateSlow(unsigned long, unsigned long, llvm::Align) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#13 0x0000ffff9740aa6c in mlir::detail::AsmStateImpl::AsmStateImpl(mlir::Operation*, mlir::OpPrintingFlags const&, llvm::DenseMap<mlir::Operation*, std::pair<unsigned int, unsigned int>, llvm::DenseMapInfo<mlir::Operation*, void>, llvm::detail::DenseMapPair<mlir::Operation*, std::pair<unsigned int, unsigned int> > >*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#14 0x0000ffff973edc4c in mlir::AsmState::AsmState(mlir::Operation*, mlir::OpPrintingFlags const&, llvm::DenseMap<mlir::Operation*, std::pair<unsigned int, unsigned int>, llvm::DenseMapInfo<mlir::Operation*, void>, llvm::detail::DenseMapPair<mlir::Operation*, std::pair<unsigned int, unsigned int> > >*, mlir::FallbackAsmResourceMap*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#15 0x0000ffff973f663c in mlir::Operation::print(llvm::raw_ostream&, mlir::OpPrintingFlags const&) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#16 0x0000ffff96fb1ac4 in std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > pybind11::detail::function_ref<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > (mlir::OpState&)>::callback_fn<init_triton_ir(pybind11::module_&&)::$_40>(long, mlir::OpState&) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#17 0x0000ffff96fef24c in pybind11::handle pybind11::cpp_function::call_impl<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, pybind11::detail::void_type, pybind11::detail::argument_loader<mlir::OpState&>, mlir::OpState&>(pybind11::detail::function_call&, pybind11::detail::function_ref<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > (mlir::OpState&)>) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#18 0x0000ffff96e949cc in pybind11::cpp_function::dispatcher(_object*, _object* const*, unsigned long, _object*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#19 0x0000ffffa13571d0 in cfunction_vectorcall_FASTCALL_KEYWORDS (func=0xffffa04fb1f0, args=0xffffc91d1740, nargsf=<optimized out>, kwnames=<optimized out>) at Objects/methodobject.c:438
+#20 0x0000ffffa1305534 in _PyObject_VectorcallTstate (kwnames=0x0, nargsf=<optimized out>, args=0xffffc91d1740, callable=0xffffa04fb1f0, tstate=0xffffa1847db0 <_PyRuntime+459008>) at ./Include/internal/pycore_call.h:92
+#21 method_vectorcall (method=<optimized out>, args=0xffffc91d1748, nargsf=<optimized out>, kwnames=0x0) at Objects/classobject.c:61
+#22 0x0000ffffa137e604 in _PyObject_VectorcallTstate (kwnames=0x0, nargsf=<optimized out>, args=<optimized out>, callable=0xffff813e0800, tstate=0xffffa1847db0 <_PyRuntime+459008>) at ./Include/internal/pycore_call.h:92
+#23 vectorcall_unbound (nargs=<optimized out>, args=<optimized out>, func=<optimized out>, unbound=<optimized out>, tstate=<optimized out>) at Objects/typeobject.c:2236
+#24 vectorcall_method (nargs=1, args=0xffffc91d1740, name=<optimized out>) at Objects/typeobject.c:2267

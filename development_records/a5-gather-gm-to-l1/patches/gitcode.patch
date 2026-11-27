@@ -1,0 +1,19 @@
+diff --git a/bishengir/lib/Dialect/HIVM/Transforms/MarkTightlyCoupledBuffer.cpp b/bishengir/lib/Dialect/HIVM/Transforms/MarkTightlyCoupledBuffer.cpp
+index 97b3f6a..9dc2a9c 100644
+--- a/bishengir/lib/Dialect/HIVM/Transforms/MarkTightlyCoupledBuffer.cpp
++++ b/bishengir/lib/Dialect/HIVM/Transforms/MarkTightlyCoupledBuffer.cpp
+@@ -98,6 +98,14 @@ static void markTightlyCoupledBufferOnFunc(func::FuncOp func) {
+   func.walk([&](hivm::CopyOp copyOp) {
+     collectAllocsFromDst(copyOp.getDst(), AddressSpace::L1, candidateAllocs);
+   });
++  // Treat L1 destinations written by an MTE2 custom op like L1 copy
++  // destinations when assigning buffer identities before the core split.
++  func.walk([&](hivm::CustomOp customOp) {
++    if (customOp.getPipe() != PIPE::PIPE_MTE2)
++      return;
++    for (Value dst : customOp.getOutputs())
++      collectAllocsFromDst(dst, AddressSpace::L1, candidateAllocs);
++  });
+   // Device-print path: l12ub (CUBE) writes the UB alloc and debug (VECTOR)
+   // reads it after split-mix-kernel. Mark it so PlanMemory can pair the two
+   // sides at the same offset and the dead write on AIC survives DSE.

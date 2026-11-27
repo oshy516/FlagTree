@@ -1,0 +1,53 @@
+12:set(LLVM_VERSION_MAJOR 19)
+16:set(LLVM_PACKAGE_VERSION 19.1.7)
+221:set(LLVM_INCLUDE_DIRS "${LLVM_INSTALL_PREFIX}/include")
+227:# values for build tree.  LLVM_INCLUDE_DIRS contains both source
+meta_op.aiv.c310.O2.bc
+libLTO.so.19.1
+meta_op.aiv.c310.O0.bc
+meta_op.mix.aic.920r1.O2.bc
+host.O0.bc
+meta_op.mix.aic.c310.O0.bc
+meta_op.aic.c220.O2.bc
+meta_op.aic.c310.O0.bc
+meta_op.aic.c220.O0.bc
+meta_op.mix.aic.c220.O0.bc
+meta_op.mix.aiv.c220.O0.bc
+meta_op.aiv.920r1.O2.bc
+meta_op.aic.c310.O2.bc
+meta_op.mix.aiv.c310.O0.bc
+libmlir_c_runner_utils.so.19.1
+meta_op.aic.920r1.O0.bc
+meta_op.mix.aiv.920r1.O0.bc
+libmlir_async_runtime.so.19.1
+meta_op.mix.aic.920r1.O0.bc
+meta_op.mix.aiv.920r1.O2.bc
+/home/ysh-workspace/.isolated/a5-tla-validation/build/npuir-install
+100 static paths; missing 100
+lib/libLLVMAArch64AsmParser.a
+lib/libLLVMAArch64CodeGen.a
+lib/libLLVMAArch64Desc.a
+lib/libLLVMAArch64Disassembler.a
+lib/libLLVMAArch64Info.a
+lib/libLLVMAArch64Utils.a
+lib/libLLVMAggressiveInstCombine.a
+lib/libLLVMAnalysis.a
+lib/libLLVMAsmParser.a
+lib/libLLVMAsmPrinter.a
+lib/libLLVMBinaryFormat.a
+lib/libLLVMBitReader.a
+/home/ysh-workspace/.isolated/a5-dma-review-20261120-u3N9eA/build/npuir-install
+100 static paths; missing 100
+lib/libLLVMAArch64AsmParser.a
+lib/libLLVMAArch64CodeGen.a
+lib/libLLVMAArch64Desc.a
+lib/libLLVMAArch64Disassembler.a
+lib/libLLVMAArch64Info.a
+lib/libLLVMAArch64Utils.a
+lib/libLLVMAggressiveInstCombine.a
+lib/libLLVMAnalysis.a
+lib/libLLVMAsmParser.a
+lib/libLLVMAsmPrinter.a
+lib/libLLVMBinaryFormat.a
+lib/libLLVMBitReader.a
+/home/ysh-workspace/.isolated/a5-tla-validation/cache/.triton/llvm/llvm-f6ded0be-3f5016d1-ubuntu-arm64/lib/libLLVMDemangle.a
