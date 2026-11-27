@@ -13,3 +13,5 @@ Start with the ordinary dot and Gather UB offline baselines. Resolve the heap ov
 3. Keep the LLVM 22 producer separate. Preserve the PR Head `libtriton.so`, `triton-opt`, `triton-mlir-opt`, and matching source/backend assets. Obtain the Ascend `libdevice.10.bc` from the matching packaging environment and verify the path selected by `get_libdevice()`. See the R5 report for the offline adapter/parser split and GDB result.
 
 For the active R5 repair, keep the existing LLVM build directory and inspect `logs/gather-r5-sdk-resume.log` and its exit file before starting any build. A clean exit unlocks `repro/r5_build_bishengir.sh`. The restored Ascend libdevice checksums are in the R5 evidence directory.
+
+R5 parser evidence includes the original captured dot adapter and the producer/consumer text parser matrix. Prefer a typed or generic serializer at the producer boundary, verified with both toolchains; avoid a shape-specific textual rewrite in production. Check Python memory safety independently of parser return status.

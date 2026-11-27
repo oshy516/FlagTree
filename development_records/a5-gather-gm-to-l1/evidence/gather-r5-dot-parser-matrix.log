@@ -1,0 +1,21 @@
+/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-opt /home/ysh-workspace/a5-dsa-template/logs/gather-r5-dot-adapter.mlir
+/home/ysh-workspace/a5-dsa-template/logs/gather-r5-dot-adapter.mlir:13:5: error: custom op 'bufferization.to_tensor' expected 'to'
+    %reinterpret_cast_0 = memref.reinterpret_cast %arg3 to offset: [0], sizes: [32, 16], strides: [16, 1] : memref<?xf16> to memref<32x16xf16, strided<[16, 1]>>
+    ^
+exit=1
+/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-opt .tmp/r5-parser/typed.mlir
+exit=0
+/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-mlir-opt /home/ysh-workspace/a5-dsa-template/logs/gather-r5-dot-adapter.mlir
+/home/ysh-workspace/a5-dsa-template/logs/gather-r5-dot-adapter.mlir:13:5: error: custom op 'bufferization.to_tensor' expected 'to'
+    %reinterpret_cast_0 = memref.reinterpret_cast %arg3 to offset: [0], sizes: [32, 16], strides: [16, 1] : memref<?xf16> to memref<32x16xf16, strided<[16, 1]>>
+    ^
+exit=1
+/home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/bin/triton-mlir-opt .tmp/r5-parser/typed.mlir
+exit=0
+/usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-opt /home/ysh-workspace/a5-dsa-template/logs/gather-r5-dot-adapter.mlir
+exit=0
+/usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-opt .tmp/r5-parser/typed.mlir
+.tmp/r5-parser/typed.mlir:12:79: error: custom op 'to' is unknown (tried 'func.to' as well)
+    %2 = bufferization.to_tensor %alloc restrict writable : memref<16x32xf16> to tensor<16x32xf16>
+                                                                              ^
+exit=1

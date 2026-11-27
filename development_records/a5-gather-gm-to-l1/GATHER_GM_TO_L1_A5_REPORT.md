@@ -70,3 +70,7 @@ After enabling the A5 flags, LLVM TableGen failed with undefined v256bf16. The p
 
 Reconfigured the existing LLVM 19 build with `-DBSPUB_DAVINCI_BISHENGIR:BOOL=ON`. CMake generated the correct header and the original MemRef object target compiled successfully. The single Ninja install job continued with two workers. The patched BiShengIR build script waits for its successful exit before building and checking TCB.
 The existing Ascend 3.6.0 libdevice asset matches both setup.py's MD5 prefix and upstream Git blob `aa92cc6564bdba4635bdef1d193432dfaedf3036`. Installed into the expected Ascend backend directory. The first UB compile retry hit heap corruption and timed out (124); ELF generation remains unverified.
+
+### R5 adapter parser isolation
+
+Captured the original dot adapter MLIR. Matching PR Head triton-opt and triton-mlir-opt reject the old custom syntax with no result type; stock BiShengIR opt accepts it. Adding an explicit `to tensor<...>` in the two captured operations reverses the text-parser outcome. Generic operation text works with the consumer. The typed adapter also emits v4 bytecode successfully with triton-mlir-opt, and stock BiShengIR opt reads it successfully. This isolates the first parse error to the LLVM 22 producer text boundary. The standalone parse exits 1; the Python capture reproduces a separate GC-time SIGSEGV after the compilation error (139). The first illegal memory access remains unknown. The typed text edit is a diagnostic only.
