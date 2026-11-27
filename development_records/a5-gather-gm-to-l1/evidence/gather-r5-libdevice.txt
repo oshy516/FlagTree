@@ -1,0 +1,4 @@
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/third_party/ascend/backend/lib/libdevice.10.bc
+bb429591b00ee4aa97306c8cc8767a79  /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/third_party/ascend/backend/lib/libdevice.10.bc
+0858d34606aa6cfb11425fb7e85223ca7b7f03dfe1485ee92b599c0dc7825013  /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/third_party/ascend/backend/lib/libdevice.10.bc
+aa92cc6564bdba4635bdef1d193432dfaedf3036
