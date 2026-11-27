@@ -78,3 +78,11 @@ Captured the original dot adapter MLIR. Matching PR Head triton-opt and triton-m
 The isolated typed-adapter probe reached the normal FlagTree compiler and generated a 25,672-byte Mix ELF for dot (exit 0, no NPU launch). Torch NPU remained loaded. The same probe for Gather UB encountered heap corruption before its adapter callback. The syntax workaround therefore establishes a path to a dot ELF; it does not establish the root cause of the in-process memory issue.
 
 A bounded GDB run of the Gather UB typed probe caught SIGABRT inside glibc free during MLIR DataFlowSolver analysis-state destruction in `mlir::triton::runUseAnalysis`, called by `TritonToLinalgPass::runOnOperation`. This precedes the producer adapter parser callback and narrows the next isolation step to the in-process pass. The free is a detection site; instrument the corresponding analysis and capture pass input to locate the original write.
+
+## R6 · structured adapter serialization and compiler build
+
+The Ascend native binding now emits generic adapter assembly with explicit operand/result types, and the normal bytecode stage consumes that assembly. The existing native build incrementally compiled the binding and relinked libtriton. The unmodified dot regression kernel generated a 25,672-byte Mix ELF; the Python process then segfaulted during garbage collection (139). This fixes the observed text-parser error, and full dot process/runtime acceptance is pending.
+
+The original LLVM 19 install succeeded. An installed-SDK-only BiShengIR configuration lacks required MLIR build-graph targets. The pinned external-project configuration reuses the LLVM build graph, enables built-in Triton and the upstream MLIR test targets required by hivmc, and starts with 16 jobs and one LLVM link job. The paired compiler build and TCB/Split/PlanMemory/sync proofs remain pending.
+
+The captured input to Gather UB TritonToLinalg was replayed through the matching CLI pass with per-pass verification and exited 0. This differs from the in-process DataFlowSolver cleanup abort. Further state-lifetime diagnostics are required before changing UseAnalysis.

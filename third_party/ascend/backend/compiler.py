@@ -572,7 +572,11 @@ def ttir_to_linalg(mod, metadata, opt, *, named_ops=True):
             dump_manager = get_dump_manager(metadata["hash"])
             dump_manager.put(str(mod), "kernel.ttadapter.mlir", binary=False)
 
-        return _serialize_module(mod, opt)
+        # The adapter is reparsed by the producer before emitting bytecode.
+        # Generic assembly carries operand and result types independently of
+        # version-specific custom formats such as bufferization.to_tensor.
+        include_debug = getattr(opt, "debug", False) or not _is_debug_line_info_disabled() or _enable_msdebug()
+        return mod.str_generic(include_debug)
 
 
 def linalg_to_bc_by_triton_mlir_opt(linalg: str, metadata, opt):

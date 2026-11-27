@@ -650,6 +650,15 @@ void init_triton_ir(py::module &&m) {
              self->print(os);
              return str;
            })
+      .def("str_generic",
+           [](OpState &self, bool debug) -> std::string {
+             std::string str;
+             llvm::raw_string_ostream os(str);
+             auto flags = debug ? getOpPrintingFlags() : OpPrintingFlags();
+             self->print(os, flags.printGenericOpForm());
+             return str;
+           },
+           py::arg("debug"))
       .def("append_operand",
            [](OpState &self, Value &val) {
              self->insertOperands(self->getNumOperands(), val);
