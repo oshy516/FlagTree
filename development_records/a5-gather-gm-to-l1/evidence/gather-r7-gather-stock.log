@@ -1,0 +1,12 @@
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+JIT compiler tool /usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-opt
+JIT compiler tool /usr/local/Ascend/cann-9.2.1/tools/bishengir/bin/bishengir-compile
+diagnostic-only gate override /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/__init__.py /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so /home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/gather-mix.bc
+GATHER_CASE torch.float16 16 32 consecutive
+corrupted size vs. prev_size
+exit=124

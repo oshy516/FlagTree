@@ -19,3 +19,5 @@ R5 parser evidence includes the original captured dot adapter and the producer/c
 R6 uses `repro/r6_resume_bishengir.sh` with the existing LLVM 19 build directory. Check its build log and exit file before starting any Ninja task. `repro/r6_dot_regression.sh` verifies the official Python-to-ELF path and requires a clean process exit. The recorded R6 invocation produced ELF but exited 139. The captured UB pass input is under evidence.
 
 R7 dot hardware replay from the project root: `bash build-phase1/gather-r2/r7_dot_device.sh`. Copy the matching R7 scripts from the records directory if they are absent from that build directory. The Gather script uses isolated gate admission and requires `R7_BISHENGIR_ROOT` set to the selected tool prefix. The patched toolchain build uses the existing R6 build script and the extra `patches/r7-matmul-namespace.patch` in the pinned compiler tree.
+
+A patched Gather replay is queued via `repro/r7_run_patched_when_ready.sh`, which checks build exit status and binary hashes before using NPU 2. The stock tool attempt timed out in JIT. The earlier dot test did exit cleanly on the same device.
