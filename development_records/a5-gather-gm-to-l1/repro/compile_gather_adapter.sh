@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 [[ $# == 6 ]] || {
-  echo "Usage: $0 COMPILER_PREFIX CANN_ROOT GATHER_MIX_BC ASCEND_LIBDEVICE ADAPTER_MLIR OUTPUT_PREFIX" >&2
+  echo "Usage: $0 COMPILER_PREFIX CANN_ROOT GATHER_DEVICE_BC ASCEND_LIBDEVICE ADAPTER_MLIR OUTPUT_PREFIX" >&2
   exit 2
 }
 tools=$(realpath "$1")

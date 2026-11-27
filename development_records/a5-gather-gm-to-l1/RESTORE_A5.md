@@ -16,7 +16,7 @@ Use a fresh AArch64 working directory, with CMake, Ninja, GCC, Python 3.12, pybi
 
 ## Build from source
 
-1. Check out the FlagTree branch and a separate AscendNPU-IR tree at the actual compiler pin. Run `bash repro/restore_a5.sh consumer WORK COMPILER_CHECKOUT CANN_ROOT 16` from this records directory. The script starts at the LLVM source tree, with no historical CMake cache. It applies `pinned-compiler.patch`, `r7-matmul-namespace.patch`, `r8-arith-aptype-gcc.patch`, and `r9-static-link.patch` in order. The GitCode TCB patch is for its own baseline.
+1. Check out the FlagTree branch and a separate AscendNPU-IR tree at the actual compiler pin. Run `bash repro/restore_a5.sh consumer WORK COMPILER_CHECKOUT CANN_ROOT 16` from this records directory. The script starts at the LLVM source tree, with no historical CMake cache. It applies `pinned-compiler.patch`, `r7-matmul-namespace.patch`, `r8-arith-aptype-gcc.patch`, `r9-static-link.patch`, and `r11-gather-cbuf-abi.patch` in order. The GitCode TCB patch is for its own baseline.
 2. Run `bash repro/restore_a5.sh producer WORK FLAGTREE_CHECKOUT LLVM22_SDK PYTHON CANN_ROOT 16`. The script uses the explicit Python interpreter and LLVM 22 prefix. Follow the checkout's producer dependency declarations for optional features. Install the matching Ascend backend libdevice at the path reported by get_libdevice().
 3. Keep the two invocations serialized or use the same work directory lock. The scripts accept 16–32 jobs. Use the two tools from the same consumer prefix. The script stages CANN c310 meta-op bitcode in its lib directory and emits separate SHA256 manifests for producer and consumer.
 

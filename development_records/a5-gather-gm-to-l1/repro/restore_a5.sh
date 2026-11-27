@@ -35,7 +35,7 @@ case "$mode" in
     git -C "$src" submodule update --init third-party/llvm-project
     llvm="$src/third-party/llvm-project"
     [[ $(git -C "$llvm" rev-parse HEAD) == "$llvm19" ]]
-    for patch in pinned-compiler r7-matmul-namespace r8-arith-aptype-gcc r9-static-link; do
+    for patch in pinned-compiler r7-matmul-namespace r8-arith-aptype-gcc r9-static-link r11-gather-cbuf-abi; do
       patch="$records/patches/$patch.patch"
       if ! git -C "$src" apply --reverse --check "$patch" 2>/dev/null; then
         git -C "$src" apply --check "$patch"

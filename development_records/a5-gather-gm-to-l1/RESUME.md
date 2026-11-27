@@ -31,3 +31,7 @@ Apply patches/r9-static-link.patch after R8. Both targets linked in the existing
 ## R10 · Gather output ABI
 
 On the isolated A5 workspace, inspect logs/gather-r10-offline.log and logs/gather-r10-device-launch.log. The current Gather adapter produces a rank-2 result that reaches the custom call as GM workspace, while the C310 device implementation expects rank-4 CBUF. Trace InsertLoadStoreForMixCV and matmul layout normalization to preserve the destination through TCB, Split and PlanMemory before retrying on hardware. Verify the scalar argument widths at the custom-call boundary. The diagnostic replay scripts are build-phase1/gather-r2/r10_gather_replay.{py,sh} and cover the captured FP16 16x32 case. Normal JIT still has an independent intermittent producer crash.
+
+## R11 · Direct CBUF patch and recovery
+
+Start with RESTORE_A5.md and repro/restore_a5.sh on a new machine. On the existing A5, the R11 pinned compiler patch built both tools with 16 jobs. The validated offline FP16/BF16 compiler artifacts and hashes are under build-phase1/gather-r2/r11. The standard generic producer adapter is required for bytecode replay. Consumer pretty-printed to_tensor syntax without the explicit result type is rejected by the producer parser. Use the AIC Gather asset and AIC launch metadata only for the verified single-core program. Keep raw captures and pass logs on authorized internal storage.

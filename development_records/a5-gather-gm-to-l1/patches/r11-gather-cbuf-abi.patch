@@ -1,0 +1,117 @@
+diff --git a/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV.cpp b/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV.cpp
+index 3ab9589..64e5e6a 100644
+--- a/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV.cpp
++++ b/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV.cpp
+@@ -35,6 +35,7 @@
+ #include "bishengir/Dialect/Utils/Util.h"
+
+ #include "bishengir/Transforms/Passes.h"
++#include "mlir/Dialect/Arith/IR/Arith.h"
+ #include "mlir/Dialect/Bufferization/IR/Bufferization.h"
+ #include "mlir/Dialect/Func/IR/FuncOps.h"
+ #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+@@ -1073,8 +1074,82 @@ InsertLoadStoreForMixCVPass::runPropagateOpPatterns(func::FuncOp funcOp,
+   return success();
+ }
+
++namespace {
++
++// Gather already performs ND2NZ in the device function. Keep the logical
++// ND tensor in the frontend, then give the device call the final NZ buffer.
++struct FoldGatherToL1Pattern : public OpRewritePattern<ND2NZOp> {
++  using OpRewritePattern::OpRewritePattern;
++
++  LogicalResult matchAndRewrite(ND2NZOp op,
++                                PatternRewriter &rewriter) const override {
++    if (op->getNumResults() != 1 || !op.getDstContinuous() ||
++        op.getInitOutBuffer() || op.getPadValue())
++      return failure();
++
++    Value source = op.getSrc();
++    auto gather = source.getDefiningOp<CustomOp>();
++    auto nd = dyn_cast<RankedTensorType>(source.getType());
++    auto nz = dyn_cast<RankedTensorType>(op->getResult(0).getType());
++    if (!gather || gather.getName() != "gather_gm_to_l1" ||
++        gather.getPipe() != PIPE::PIPE_MTE2 || !source.hasOneUse() ||
++        gather->getBlock() != op->getBlock() || gather->getNumResults() != 1 ||
++        gather->getNumOperands() != 5 || !nd || !nz || nd.getRank() != 2 ||
++        nz.getRank() != 4 || !nd.hasStaticShape() || !nz.hasStaticShape())
++      return failure();
++
++    Type element = nd.getElementType();
++    auto symbol = gather->getAttrOfType<StringAttr>("symbol");
++    if (nz.getElementType() != element ||
++        !((element.isF16() && symbol == rewriter.getStringAttr(
++                                           "custom_gather_gm_to_l1_half")) ||
++          (element.isBF16() && symbol == rewriter.getStringAttr(
++                                            "custom_gather_gm_to_l1_bf16"))))
++      return failure();
++
++    // The device routine writes complete rows, without initializing NZ padding.
++    if (nz.getDimSize(1) * nz.getDimSize(2) != nd.getDimSize(0) ||
++        nz.getDimSize(0) * nz.getDimSize(3) != nd.getDimSize(1) ||
++        nz.getDimSize(2) != 16 || nz.getDimSize(3) != 16 ||
++        !gather->getOperand(2).getType().isInteger(32) ||
++        !gather->getOperand(3).getType().isInteger(32))
++      return failure();
++
++    rewriter.setInsertionPoint(gather);
++    Location loc = gather.getLoc();
++    auto cbuf = AddressSpaceAttr::get(rewriter.getContext(), AddressSpace::L1);
++    auto bufferType = MemRefType::get(nz.getShape(), element,
++                                     MemRefLayoutAttrInterface{}, cbuf);
++    Value buffer = rewriter.create<memref::AllocOp>(loc, bufferType);
++    auto extend = [&](Value value) {
++      return rewriter.create<arith::ExtSIOp>(loc, rewriter.getI64Type(), value);
++    };
++    OperationState state(loc, CustomOp::getOperationName());
++    state.addAttributes(gather->getAttrs());
++    state.addOperands({gather->getOperand(0), gather->getOperand(1),
++                       extend(gather->getOperand(2)),
++                       extend(gather->getOperand(3)), buffer});
++    rewriter.create(state);
++    Value tile = rewriter.create<bufferization::ToTensorOp>(
++        loc, buffer, /*restrict=*/true, /*writable=*/true);
++    rewriter.replaceOp(op, tile);
++    rewriter.eraseOp(gather);
++    return success();
++  }
++};
++
++} // namespace
++
+ LogicalResult
+ InsertLoadStoreForMixCVPass::insertPropagationOp(func::FuncOp funcOp) {
++  if (isA5Target()) {
++    RewritePatternSet gatherPatterns(funcOp.getContext());
++    gatherPatterns.add<FoldGatherToL1Pattern>(funcOp.getContext());
++    GreedyRewriteConfig config;
++    config.fold = false;
++    if (failed(applyPatternsGreedily(funcOp, std::move(gatherPatterns), config)))
++      return failure();
++  }
+   IRRewriter rewriter(funcOp.getContext());
+   rewriter.setInsertionPointToStart(&funcOp.getBody().front());
+   for (auto arg : funcOp.getArguments()) {
+diff --git a/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV/Utils.cpp b/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV/Utils.cpp
+index 1c846fb..06d6780 100644
+--- a/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV/Utils.cpp
++++ b/bishengir/lib/Dialect/HIVM/Transforms/InsertLoadStoreForMixCV/Utils.cpp
+@@ -162,6 +162,17 @@ void insertPropagatorsForCustomLikeOp(llvm::ArrayRef<hivm::PIPE> pipes,
+                                       PatternRewriter &rewriter) {
+   auto info = getCustomOpPropagationInfo(pipes);
+   auto structuredOp = cast<hivm::HIVMStructuredOp>(op);
++  if (auto custom = dyn_cast<hivm::CustomOp>(op);
++      custom && custom.getName() == "gather_gm_to_l1" &&
++      structuredOp.getDpsInits().size() == 1) {
++    auto dst = dyn_cast<MemRefType>(structuredOp.getDpsInits().front().getType());
++    if (dst && dst.getRank() == 4 &&
++        dst.getMemorySpace() == AddressSpaceAttr::get(op->getContext(),
++                                                      AddressSpace::L1)) {
++      info.outCoreType = TCoreType::CUBE;
++      info.outAddressSpace = AddressSpace::L1;
++    }
++  }
+   auto tagOperandUp = [&](OpOperand *operand, TCoreType coreType,
+                           hivm::AddressSpace addressSpace) {
+     if (isa<ShapedType>(operand->get().getType()))
