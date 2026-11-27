@@ -1,0 +1,43 @@
+warning: Unable to determine the number of hardware watchpoints available.
+warning: Unable to determine the number of hardware breakpoints available.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:13: FutureWarning: triton.language.extra.cann.extension.atan2 is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.atan2 instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.atan2")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:35: FutureWarning: triton.language.extra.cann.extension.isfinited is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.isfinited instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.isfinited")
+/home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/language/extra/cann/extension/math_ops.py:49: FutureWarning: triton.language.extra.cann.extension.finitef is deprecated and will be removed in the next release; use triton.language.extra.cann.libdevice.finitef instead.
+  @_deprecated(replacement="triton.language.extra.cann.libdevice.finitef")
+[Detaching after vfork from child process 830362]
+[Detaching after vfork from child process 830365]
+[Detaching after vfork from child process 830368]
+source /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/__init__.py native /home/ysh-workspace/a5-dsa-template/build-phase1/gather-r2/prhead-native/wheel/triton/_C/libtriton.so case ub
+corrupted size vs. prev_size
+
+Thread 1 "python" received signal SIGABRT, Aborted.
+0x0000fffff77d2038 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#0  0x0000fffff77d2038 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#1  0x0000fffff778a83c in raise () from /lib/aarch64-linux-gnu/libc.so.6
+#2  0x0000fffff7777134 in abort () from /lib/aarch64-linux-gnu/libc.so.6
+#3  0x0000fffff77c6030 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#4  0x0000fffff77dc4bc in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#5  0x0000fffff77dce18 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#6  0x0000fffff77de4b8 in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+#7  0x0000fffff77e0bd4 in free () from /lib/aarch64-linux-gnu/libc.so.6
+#8  0x0000ffffec9dd334 in llvm::DenseMap<mlir::LatticeAnchor, llvm::DenseMap<mlir::TypeID, std::unique_ptr<mlir::AnalysisState, std::default_delete<mlir::AnalysisState> >, llvm::DenseMapInfo<mlir::TypeID, void>, llvm::detail::DenseMapPair<mlir::TypeID, std::unique_ptr<mlir::AnalysisState, std::default_delete<mlir::AnalysisState> > > >, llvm::DenseMapInfo<mlir::LatticeAnchor, void>, llvm::detail::DenseMapPair<mlir::LatticeAnchor, llvm::DenseMap<mlir::TypeID, std::unique_ptr<mlir::AnalysisState, std::default_delete<mlir::AnalysisState> >, llvm::DenseMapInfo<mlir::TypeID, void>, llvm::detail::DenseMapPair<mlir::TypeID, std::unique_ptr<mlir::AnalysisState, std::default_delete<mlir::AnalysisState> > > > > >::~DenseMap() () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#9  0x0000ffffed42b3f8 in mlir::triton::runUseAnalysis(mlir::triton::FuncOp&) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#10 0x0000ffffed3b66c8 in void llvm::function_ref<void (mlir::Operation*)>::callback_fn<mlir::detail::walk<(mlir::WalkOrder)1, mlir::ForwardIterator, TritonToLinalgPass::runOnOperation()::$_29, mlir::triton::FuncOp, void>(mlir::Operation*, TritonToLinalgPass::runOnOperation()::$_29&&)::{lambda(mlir::Operation*)#1}>(long, mlir::Operation*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#11 0x0000ffffec9dfb6c in void mlir::detail::walk<mlir::ForwardIterator>(mlir::Operation*, llvm::function_ref<void (mlir::Operation*)>, mlir::WalkOrder) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#12 0x0000ffffed3ac170 in TritonToLinalgPass::runOnOperation() () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#13 0x0000ffffedc88000 in mlir::detail::OpToOpPassAdaptor::run(mlir::Pass*, mlir::Operation*, mlir::AnalysisManager, bool, unsigned int) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#14 0x0000ffffedc88bc4 in mlir::detail::OpToOpPassAdaptor::runPipeline(mlir::OpPassManager&, mlir::Operation*, mlir::AnalysisManager, bool, unsigned int, mlir::PassInstrumentor*, mlir::PassInstrumentation::PipelineParentInfo const*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#15 0x0000ffffedc8f47c in mlir::PassManager::runPasses(mlir::Operation*, mlir::AnalysisManager) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#16 0x0000ffffedc984e0 in void llvm::function_ref<void ()>::callback_fn<mlir::PassManager::runWithCrashRecovery(mlir::Operation*, mlir::AnalysisManager)::$_2 const>(long) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#17 0x0000fffff2fdbc44 in llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#18 0x0000ffffedc96968 in mlir::PassManager::runWithCrashRecovery(mlir::Operation*, mlir::AnalysisManager) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#19 0x0000ffffedc8eba8 in mlir::PassManager::run(mlir::Operation*) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#20 0x0000ffffed72a204 in void pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>::callback_fn<init_triton_ir(pybind11::module_&&)::$_262>(long, mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#21 0x0000ffffed77a314 in void pybind11::detail::argument_loader<mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::call_impl<void, pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>&, 0ul, 1ul, 2ul, pybind11::gil_scoped_release>(pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>&, std::integer_sequence<unsigned long, 0ul, 1ul, 2ul>, pybind11::gil_scoped_release&&) && () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#22 0x0000ffffed77a11c in std::enable_if<std::is_void<void>::value, pybind11::detail::void_type>::type pybind11::detail::argument_loader<mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::call<void, pybind11::gil_scoped_release, pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>&>(pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>&) && () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+#23 0x0000ffffed77a040 in pybind11::handle pybind11::cpp_function::call_impl<void, pybind11::gil_scoped_release, pybind11::detail::argument_loader<mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(pybind11::detail::function_call&, pybind11::detail::function_ref<void (mlir::PassManager&, mlir::ModuleOp&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>) () from /home/ysh-workspace/a5-dsa-template/FlagTree-v36-gather-r2/python/triton/_C/libtriton.so
+gdb_exit=0
