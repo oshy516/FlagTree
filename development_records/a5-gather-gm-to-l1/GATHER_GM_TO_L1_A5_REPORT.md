@@ -86,3 +86,8 @@ The Ascend native binding now emits generic adapter assembly with explicit opera
 The original LLVM 19 install succeeded. An installed-SDK-only BiShengIR configuration lacks required MLIR build-graph targets. The pinned external-project configuration reuses the LLVM build graph, enables built-in Triton and the upstream MLIR test targets required by hivmc, and starts with 16 jobs and one LLVM link job. The paired compiler build and TCB/Split/PlanMemory/sync proofs remain pending.
 
 The captured input to Gather UB TritonToLinalg was replayed through the matching CLI pass with per-pass verification and exited 0. This differs from the in-process DataFlowSolver cleanup abort. Further state-lifetime diagnostics are required before changing UseAnalysis.
+
+## R7 · A5 device validation
+Physical NPU 2 was idle and mapped to runtime device 0 (Ascend950DT_9582). The existing 25,672-byte Mix dot ELF launched through its compiled kernel metadata and FlagTree driver on that device. FP16 inputs / FP32 output matched the PyTorch reference exactly (max absolute error 0.0), synchronized successfully, and exited 0. This is a device pass for the dot baseline.
+
+The existing patched compiler build stopped on GCC's explicit-template-specialization namespace rule in Matmul.cpp. The build-pin worktree now reopens the anonymous namespace around the specialization. The incremental 16-job build passed the failed object and continued. The exact build-pin patch is saved separately from the TCB candidate.
