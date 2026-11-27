@@ -101,3 +101,9 @@ ArithToHIVMAVE.cpp now uses four member partial specializations with a defaulted
 ## R9 · Static links and first patched Gather compile
 
 Both host tools linked successfully with Ninja -j16 after making AdapterSanitizer an explicit A3/A5 static dependency and instantiating collapseAndReplace for CollapseShapeOp. Tool SHA256 values are in logs/gather-r9-tools.sha256. The minimal TCB check marked the CustomOp CBUF allocation and Split retained TCB ID 0 in both AIC and AIV, with Gather on AIC. Running PlanMemory directly on this fixture aborted because the Copy control still had a tensor operand. The first patched Gather JIT reached device linking, which failed with missing built-in c310 meta-op symbols. The existing CANN 9.2.1 c310 assets were linked into the isolated compiler build lib directory for the follow-up.
+
+## R10 · Gather pipeline and A5 fault
+
+With the c310 meta-op assets staged, the captured FP16 16x32 Gather compiled offline through TCB, Split and PlanMemoryRegBase and produced a 44,576-byte Mix ELF. In the final AIC IR the CustomOp receives a rank-2 GM workspace view as its destination, followed by a separate ND2NZ into CBUF. The linked implementation expects a rank-4 CBUF destination. This is a visible ABI mismatch and a candidate cause of the runtime fault.
+
+The ordinary Gather JIT retry exited 139 in make_ttir. A diagnostic replay using the captured adapter with the normal device compiler and launcher launched the FP16 consecutive case on idle NPU 2. Synchronization reported 507015 with AIC 263/82 (unaligned or out-of-bounds address), before output comparison. Ordinary dot was not repeated.
